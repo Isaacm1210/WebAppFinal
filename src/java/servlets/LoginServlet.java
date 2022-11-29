@@ -33,11 +33,13 @@ public class LoginServlet extends HttpServlet {
             if(action.equals("Register")){
                 session.setAttribute("enter", "register");
                 getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+            }
+            
+            if(action.equals("Login")){
+                session.setAttribute("enter", "register");
+                getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
         }
-        
-        
-        
-        
+
     }
 
 
