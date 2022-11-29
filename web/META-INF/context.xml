@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/Final_Project"/>
+<Context path="/">
+ 
+    <Resource name="jdbc/inventorydb" auth="Container" 
+        driverClassName="com.mysql.jdbc.Driver"
+        url="jdbc:mysql://localhost:3306/app_db" 
+        username="root" password="password" 
+        maxActive="100" maxIdle="30" maxWait="10000" 
+        logAbandoned="true" removeAbandoned="true" 
+        removeAbandonedTimeout="60" type="javax.sql.DataSource" />
+</Context>
+
