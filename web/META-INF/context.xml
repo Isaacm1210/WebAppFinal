@@ -3,7 +3,7 @@
  
     <Resource name="jdbc/inventorydb" auth="Container" 
         driverClassName="com.mysql.jdbc.Driver"
-        url="jdbc:mysql://localhost:3306/app_db" 
+        url="jdbc:mysql://localhost:3306/inventorydb" 
         username="root" password="password" 
         maxActive="100" maxIdle="30" maxWait="10000" 
         logAbandoned="true" removeAbandoned="true" 
