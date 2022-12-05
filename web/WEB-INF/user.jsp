@@ -12,6 +12,10 @@
         <title>JSP Page</title>
     </head>
     <body>
+        
         <h1>This is the Home Page</h1>
+        <b> Welcome ${message}</b>
+        <br>
+        <a href="Login">Logout</a>
     </body>
 </html>

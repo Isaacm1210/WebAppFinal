@@ -19,8 +19,8 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             HttpSession session = request.getSession();
+            session.invalidate();
             
-            session.setAttribute("enter", null);
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 
     }
@@ -51,7 +51,8 @@ public class LoginServlet extends HttpServlet {
                     getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
                 }
                 else{
-                    getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+                    session.setAttribute("email", email);
+                    response.sendRedirect("user");
                 }
 
             }    

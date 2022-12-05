@@ -37,15 +37,15 @@ public class ItemDB{
         
     }
     
-    public void addItem() throws Exception{
+    public void addItem(Item item) throws Exception{
         
     }
     
-    public void deleteItem() throws Exception{
+    public void deleteItem(Item item) throws Exception{
         
     }
     
-    public void updateItem() throws Exception{
+    public void updateItem(Item item) throws Exception{
         
     }
 }
