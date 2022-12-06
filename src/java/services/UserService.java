@@ -14,12 +14,14 @@ public class UserService {
     
     public List<User> getAllUsers() throws Exception{
         
+        
         return null;
     }
     
-    public User getUser()throws Exception{
-        
-        return null;
+    public User getUser(String email)throws Exception{
+        UserDB userDB = new UserDB();
+        User user = userDB.getUser(email);
+        return user;
     }
     
     public void addUser(String email, String firstName, String lastName, String password, Role role)throws Exception{
