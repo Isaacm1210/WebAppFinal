@@ -1,6 +1,7 @@
 
 package services;
 
+import dataaccess.RoleDB;
 import models.Role;
 
 /**
@@ -9,9 +10,11 @@ import models.Role;
  */
 public class RoleService {
     
-    public Role getRole(){
+    public Role getRole(int roleID) throws Exception{
+        RoleDB roleDB = new RoleDB();
+        Role role = roleDB.getRole(roleID);
         
-        return null;
+        return role;
     }
     
 }
