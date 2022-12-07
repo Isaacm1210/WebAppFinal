@@ -37,8 +37,16 @@ public class UserService {
         
     }
     
-    public void updateUser()throws Exception{
+    public void updateUser(String email, String firstName, String lastName, boolean active, String password, Role role)throws Exception{
+        UserDB userDB = new UserDB();
+        User user = userDB.getUser(email);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setPassword(password);
+        user.setActive(active);
+        user.setRole(role);
         
+        userDB.updateUser(user);
     }
     
     

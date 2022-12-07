@@ -64,6 +64,17 @@ public class UserDB {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
         
+        try{
+            trans.begin();
+            em.merge(user);
+            trans.commit();
+        }
+        catch(Exception ex){
+            trans.rollback();
+        }
+        finally{
+            em.close();
+        }
     }
     
 }

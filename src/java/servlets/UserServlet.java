@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import models.Role;
 import models.User;
 import services.UserService;
 
@@ -33,6 +34,8 @@ public class UserServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("email");
         UserService us = new UserService();
+        String action = request.getParameter("action");
+        
         try {
             User user = us.getUser(email);
             session.setAttribute("user", user);
@@ -40,7 +43,20 @@ public class UserServlet extends HttpServlet {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        session.setAttribute("view", "false");
+        if (action != null && action.equals("close")) {
+          session.setAttribute("view", "close");  
+        }
+        
+        if(action != null && action.equals("viewInfo")){
+            session.setAttribute("view", "view");
+        }
+        
+        if(action != null && action.equals("edit")) {
+            session.setAttribute("view", "edit");
+        }
+        
+        
+        
         getServletContext().getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response); 
         
     }
@@ -51,14 +67,33 @@ public class UserServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         String action = request.getParameter("action");
+        UserService us = new UserService();
         
-        if(action.equals("viewInfo")){
-            session.setAttribute("view", "true");
-            getServletContext().getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response);
+        String email = (String) session.getAttribute("email");
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String password = request.getParameter("password");
+        
+        try {
+            User user = us.getUser(email);
+            
+            if(action != null && action.equals("Edit Info")){
+                
+                boolean active = user.getActive();
+                Role role = user.getRole();
+                
+                us.updateUser(email, firstName, lastName, active, password, role);
+            } 
+
+                user = us.getUser(email);
+                session.setAttribute("user", user);
+            
+        } catch (Exception ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+            request.setAttribute("message", "error");
         }
         
-        
-        
+       getServletContext().getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response); 
         
         
     }
