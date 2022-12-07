@@ -84,17 +84,31 @@ public class UserServlet extends HttpServlet {
                 
                 us.updateUser(email, firstName, lastName, active, password, role);
             } 
-
-                user = us.getUser(email);
-                session.setAttribute("user", user);
+                
+            if(action != null && action.equals("Deactivate")){
+                boolean active = false;
+                Role role = user.getRole();
+                password = user.getPassword();
+                
+                us.updateUser(email, firstName, lastName, active, password, role);
+                response.sendRedirect("Login");
+            }
+                
             
         } catch (Exception ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
             request.setAttribute("message", "error");
         }
         
-       getServletContext().getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response); 
-        
-        
+        if(action != "Deactivate"){
+        try {
+            User user = us.getUser(email);
+            user = us.getUser(email);
+            session.setAttribute("user", user);
+            
+        } catch (Exception ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
     }
 }

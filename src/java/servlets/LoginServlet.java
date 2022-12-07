@@ -82,11 +82,14 @@ public class LoginServlet extends HttpServlet {
                     request.setAttribute("message", "Password/User-name is incorrect");
                     getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
                 }
+                else if(user.getActive() == false){
+                    request.setAttribute("message", "Your account has been Deactivated");
+                    getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+                }
                 else{
                     session.setAttribute("email", email);
                     response.sendRedirect("user");
                 }
-
             }    
         }
     }

@@ -13,7 +13,7 @@
     </head>
     <body>
 
-        <h1><b> Welcome ${user.firstName}</b></h1>
+        <h1><b> Welcome ${user.firstName}, to HOME nVentory</b></h1>
         <b>${message}</b>
         <a href="Login">Logout</a>
         <br>
@@ -36,6 +36,7 @@
                     <td>${user.lastName}</td>
                     <td>${user.role.roleName}</td>
                     <td><a href="user?action=edit">Edit</a></td>
+
                 </tr>
             </table>
                 <a href="user?action=close">Close</a>
@@ -55,6 +56,7 @@
                 Password: <input type="password" name="password">
                 <br>
                 <input type="submit" value="Edit Info" name="action">
+                <input type="submit" value="Deactivate" name="action">
             </form>
              <a href="user?action=close">Close</a>
         </c:if>
