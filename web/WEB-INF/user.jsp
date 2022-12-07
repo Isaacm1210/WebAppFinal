@@ -15,9 +15,15 @@
 
         <h1><b> Welcome ${user.firstName}, to HOME nVentory</b></h1>
         <b>${message}</b>
+        
         <a href="Login">Logout</a>
         <br>
         <br>
+        
+        <a href="inventory">Go to your Inventory</a>
+        <br>
+        <br>
+        
         <c:if test="${view eq 'close' || view eq null}">
             <a href="user?action=viewInfo">View User Info</a>
         </c:if>
@@ -60,6 +66,8 @@
             </form>
              <a href="user?action=close">Close</a>
         </c:if>
+             
+        <br>
         
     </body>
 </html>
