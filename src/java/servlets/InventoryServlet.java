@@ -32,6 +32,34 @@ public class InventoryServlet extends HttpServlet {
             String email = (String) session.getAttribute("email");
             UserService us = new UserService();
             CategoryService cs = new CategoryService();
+            String action = request.getParameter("action");
+            
+        try {
+            
+        
+            if(action != null && action.equals("Edit")){
+                session.setAttribute("itemEdit", "true");
+                
+                int editCatID = Integer.parseInt(request.getParameter("itemCat"));
+                Category editCat = cs.getCategory(editCatID);
+ 
+
+                String itemID = request.getParameter("itemID");
+                String itemN = request.getParameter("itemN");
+                double itemP = Double.parseDouble(request.getParameter("itemP"));
+                
+                request.setAttribute("itemPrice", itemP);
+                request.setAttribute("editCat", editCat);
+                request.setAttribute("editItemName", itemN);
+                request.setAttribute("editItemID", itemID);
+            }
+            
+            if(action != null && action.equals("cancel")){
+                session.setAttribute("itemEdit", "false");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(InventoryServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
             
         try {
             User user = us.getUser(email);
@@ -66,34 +94,67 @@ public class InventoryServlet extends HttpServlet {
         
         int categoryID = Integer.parseInt(request.getParameter("category"));
         String itemName = request.getParameter("itemName");
-        double itemPrice = Double.parseDouble(request.getParameter("itemPrice"));
+        
         int itemID = items.size() + 1;
+        
+        
+        
         
         try {
             User user = us.getUser(email);
-            
+            double itemPrice = Double.parseDouble(request.getParameter("itemPrice"));
+                
             if(action != null && action.equals("Add")){
             Category category = cs.getCategory(categoryID);
             
             is.addItem(itemID, itemName, itemPrice, category, user);
 
             }
-          items = user.getItemList();
-          session.setAttribute("items", items);
-    
+            
+            if(itemName.equals("") || itemName == null){
+                request.setAttribute("message", "All Fields Must be filled.");
+                session.setAttribute("itemEdit", "false");
+            }else{
+                if(action != null && action.equals("Save")){
+                    request.setAttribute("message", "save button works");
+
+                    itemID = Integer.parseInt(request.getParameter("editItemID"));
+                    int OcatID = Integer.parseInt(request.getParameter("oCatID"));
+
+
+
+                    Category category = cs.getCategory(categoryID);
+                    Category origCategory = cs.getCategory(OcatID);
+
+                    is.updateItem(itemID, itemName, itemPrice, category, user);
+
+                    Item item = is.getItem(itemID);
+                    if(category != origCategory){
+
+                        origCategory.getItemList().remove(item);
+                        category.getItemList().add(item);
+                    }
+                }
+            }
+            
+        }catch (NumberFormatException e){
+            request.setAttribute("message", "All Fields Must be filled. Price Cannot Be \"0\".");
+        } catch (Exception ex) {
+            Logger.getLogger(InventoryServlet.class.getName()).log(Level.SEVERE, null, ex);
+            request.setAttribute("message", "Error");
+        }
+        
+        
+        User user;
+        try {
+            session.setAttribute("itemEdit", "false");
+            user = us.getUser(email);
+            items = user.getItemList();
+            session.setAttribute("items", items);
+            getServletContext().getRequestDispatcher("/WEB-INF/inventory.jsp").forward(request, response);       
         } catch (Exception ex) {
             Logger.getLogger(InventoryServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        getServletContext().getRequestDispatcher("/WEB-INF/inventory.jsp").forward(request, response);
-        
-        
-        
-        
-        
-        
     }
-
-
-
 }

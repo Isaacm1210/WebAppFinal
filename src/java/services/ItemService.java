@@ -34,7 +34,16 @@ public class ItemService {
         
     }
     
-    public void updateItem(int itemID, String itemName, double price, Category category, User owner){
+    public void updateItem(int itemID, String itemName, double price, Category category, User owner) throws Exception{
+        ItemDB itemDB = new ItemDB();
+        Item item = itemDB.getItem(itemID);
+        
+        item.setItemName(itemName);
+        item.setPrice(price);
+        item.setCategory(category);
+        item.setOwner(owner);
+        
+        itemDB.updateItem(item);
         
     }
             

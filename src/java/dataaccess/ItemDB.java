@@ -65,6 +65,19 @@ public class ItemDB{
     }
     
     public void updateItem(Item item) throws Exception{
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        
+        try{
+            trans.begin();
+            em.merge(item);
+            trans.commit();     
+        }catch(Exception ex){
+            trans.rollback();
+        }finally{
+            em.close();
+        }
+            
         
     }
 }

@@ -24,6 +24,7 @@
         <br>
         <br>
         
+        
         <c:if test="${items.size() lt 1}">
             <b>No items found. Please add an item</b>
         </c:if>
@@ -40,26 +41,65 @@
                         <td>${item.category.categoryName}</td>
                         <td>${item.itemName}</td>
                         <td>${item.price}</td>
+                        
+                        <td><a href="<c:url value="/inventory"><c:param name="action" value="Edit"/>
+                                   <c:param name="itemID" value="${item.itemId}"/>
+                                   <c:param name="itemN" value="${item.itemName}"/>
+                                   <c:param name="itemP" value="${item.price}"/>
+                                   <c:param name="itemCat" value="${item.category.categoryId}"/>
+                               </c:url>">Edit</a></td>
+                        
+                        <td><a href="<c:url value="/inventory"><c:param name="action" value="Delete"/>
+                                   <c:param name="itemID" value="${item.itemId}"/>
+                               </c:url>">Delete</a></td>
+                        
                     </tr>
                 </c:forEach>
             </table>
         </c:if>
+            
             <br>
-            
-            <b>Add an Item</b>
-            
-            <form action="inventory" method="post">
-                Category: <select name="category">
-                    <c:forEach var="Category" items="${categories}">
-                        <option value="${Category.categoryId}">${Category.categoryName}</option>
-                    </c:forEach>
-                </select>
+            <c:if test="${itemEdit ne 'true'}">
+                <b>Add an Item</b>
+
+                <form action="inventory" method="post">
+                    Category: <select name="category">
+                        <c:forEach var="Category" items="${categories}">
+                            <option value="${Category.categoryId}">${Category.categoryName}</option>
+                        </c:forEach>
+                    </select>
+                    <br>
+                    Item Name: <input type="text" name="itemName">
+                    <br>
+                    Item Price: <input type="number" step="0.01" min="0" name="itemPrice">
+                    <br>
+                    <input type="submit" name="action" value="Add">
+                </form>
+            </c:if>
+                
+            <c:if test="${itemEdit eq 'true'}">
+                <b>Edit Item "${editItemName}"</b>
                 <br>
-                Item Name: <input type="text" name="itemName">
-                <br>
-                Item Price: <input type="number" step="0.01" min="0" name="itemPrice">
-                <br>
-                <input type="submit" name="action" value="Add">
-            </form>
+
+                <form action="inventory" method="post">
+                    Category: <select name="category">
+                        <option selected="selected" value="${editCat.categoryId}">${editCat.categoryName}</option>
+                        <c:forEach var="Category" items="${categories}">
+                            <option value="${Category.categoryId}">${Category.categoryName}</option>
+                        </c:forEach>
+                    </select>
+                    <br>
+                    Item Name: <input type="text" name="itemName" value="${editItemName}">
+                    <br>
+                    Item Price: <input type="number" step="0.01" min="0" name="itemPrice" value="${itemPrice}">
+                    <br>
+                    <input type="hidden" name="oCatID" value="${editCat.categoryId}">
+                    <input type="hidden" name="editItemID" value="${editItemID}">
+                    <input type="submit" name="action" value="Save">
+                </form>
+                <a href="inventory?action=cancel">Cancel</a>
+            </c:if>
+            <br>
+            <b style="color:red;">${message}</b>
     </body>
 </html>
