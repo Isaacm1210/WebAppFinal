@@ -61,7 +61,26 @@ public class ItemDB{
     }
     
     public void deleteItem(Item item) throws Exception{
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
         
+        try{
+            User owner = item.getOwner();
+            owner.getItemList().remove(item);
+            
+            Category category = item.getCategory();
+            category.getItemList().remove(item);
+            
+            trans.begin();
+            em.remove(em.merge(item));
+            em.merge(owner);
+            em.merge(category);
+            trans.commit();
+        }catch(Exception ex){
+            trans.rollback();
+        }finally{
+            em.close();
+        }
     }
     
     public void updateItem(Item item) throws Exception{

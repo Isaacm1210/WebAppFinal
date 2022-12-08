@@ -30,7 +30,11 @@ public class ItemService {
         itemDB.addItem(item);
     }
     
-    public void deleteItem(int itemID){
+    public void deleteItem(int itemID) throws Exception{
+        ItemDB itemDB = new ItemDB();
+        Item item = itemDB.getItem(itemID);
+        
+        itemDB.deleteItem(item);
         
     }
     

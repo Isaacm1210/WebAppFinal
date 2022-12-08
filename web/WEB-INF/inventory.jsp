@@ -48,10 +48,7 @@
                                    <c:param name="itemP" value="${item.price}"/>
                                    <c:param name="itemCat" value="${item.category.categoryId}"/>
                                </c:url>">Edit</a></td>
-                        
-                        <td><a href="<c:url value="/inventory"><c:param name="action" value="Delete"/>
-                                   <c:param name="itemID" value="${item.itemId}"/>
-                               </c:url>">Delete</a></td>
+ 
                         
                     </tr>
                 </c:forEach>
@@ -96,6 +93,11 @@
                     <input type="hidden" name="oCatID" value="${editCat.categoryId}">
                     <input type="hidden" name="editItemID" value="${editItemID}">
                     <input type="submit" name="action" value="Save">
+                </form>
+                
+                <form action="inventory" method="post">
+                    <input type="hidden" name="deleteItemID" value="${editItemID}">
+                    <input type="submit" name="action" value="Delete">
                 </form>
                 <a href="inventory?action=cancel">Cancel</a>
             </c:if>

@@ -32,6 +32,7 @@ public class InventoryServlet extends HttpServlet {
             String email = (String) session.getAttribute("email");
             UserService us = new UserService();
             CategoryService cs = new CategoryService();
+            ItemService is = new ItemService();
             String action = request.getParameter("action");
             
         try {
@@ -57,6 +58,7 @@ public class InventoryServlet extends HttpServlet {
             if(action != null && action.equals("cancel")){
                 session.setAttribute("itemEdit", "false");
             }
+  
         } catch (Exception ex) {
             Logger.getLogger(InventoryServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -72,12 +74,11 @@ public class InventoryServlet extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(InventoryServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
+
             getServletContext().getRequestDispatcher("/WEB-INF/inventory.jsp").forward(request, response);
     }
 
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -91,64 +92,69 @@ public class InventoryServlet extends HttpServlet {
         
         String email = (String) session.getAttribute("email");
         List<Item> items = (List<Item>) session.getAttribute("items");
-        
-        int categoryID = Integer.parseInt(request.getParameter("category"));
+
         String itemName = request.getParameter("itemName");
-        
         int itemID = items.size() + 1;
-        
-        
-        
-        
+
         try {
             User user = us.getUser(email);
-            double itemPrice = Double.parseDouble(request.getParameter("itemPrice"));
-                
-            if(action != null && action.equals("Add")){
-            Category category = cs.getCategory(categoryID);
             
-            is.addItem(itemID, itemName, itemPrice, category, user);
-
-            }
-            
-            if(itemName.equals("") || itemName == null){
-                request.setAttribute("message", "All Fields Must be filled.");
-                session.setAttribute("itemEdit", "false");
-            }else{
-                if(action != null && action.equals("Save")){
-                    request.setAttribute("message", "save button works");
-
-                    itemID = Integer.parseInt(request.getParameter("editItemID"));
-                    int OcatID = Integer.parseInt(request.getParameter("oCatID"));
-
-
-
-                    Category category = cs.getCategory(categoryID);
-                    Category origCategory = cs.getCategory(OcatID);
-
-                    is.updateItem(itemID, itemName, itemPrice, category, user);
-
-                    Item item = is.getItem(itemID);
-                    if(category != origCategory){
-
-                        origCategory.getItemList().remove(item);
-                        category.getItemList().add(item);
+            switch (action){
+                case "Delete":
+                    itemID = Integer.parseInt(request.getParameter("deleteItemID"));
+                    is.deleteItem(itemID);
+                    break;
+                    
+                    
+                case "Add":
+                    if(itemName.equals("") || itemName == null){
+                        request.setAttribute("message", "All Fields Must be filled.");
+                        
+                    }else{
+                        int categoryID = Integer.parseInt(request.getParameter("category"));
+                        double itemPrice = Double.parseDouble(request.getParameter("itemPrice"));
+                        Category category = cs.getCategory(categoryID);
+                        is.addItem(itemID, itemName, itemPrice, category, user);
                     }
-                }
+                    break;
+                    
+                    
+                case "Save":
+                    if(itemName.equals("") || itemName == null){
+                        request.setAttribute("message", "All Fields Must be filled.");
+                        
+                    }else{
+                        int categoryID = Integer.parseInt(request.getParameter("category"));
+                        double itemPrice = Double.parseDouble(request.getParameter("itemPrice"));
+                        itemID = Integer.parseInt(request.getParameter("editItemID"));
+                        int OcatID = Integer.parseInt(request.getParameter("oCatID"));
+                    
+                        Category category = cs.getCategory(categoryID);
+                        Category origCategory = cs.getCategory(OcatID);
+
+                        is.updateItem(itemID, itemName, itemPrice, category, user);
+
+                        Item item = is.getItem(itemID);
+                        if(category != origCategory){
+
+                            origCategory.getItemList().remove(item);
+                            category.getItemList().add(item);
+                        }
+                    }
             }
-            
-        }catch (NumberFormatException e){
-            request.setAttribute("message", "All Fields Must be filled. Price Cannot Be \"0\".");
+
+        }catch (NumberFormatException ex){
+            request.setAttribute("message", "All Fields Must be filled.");
         } catch (Exception ex) {
             Logger.getLogger(InventoryServlet.class.getName()).log(Level.SEVERE, null, ex);
             request.setAttribute("message", "Error");
         }
         
         
-        User user;
+        
         try {
             session.setAttribute("itemEdit", "false");
-            user = us.getUser(email);
+            User user = us.getUser(email);
             items = user.getItemList();
             session.setAttribute("items", items);
             getServletContext().getRequestDispatcher("/WEB-INF/inventory.jsp").forward(request, response);       
