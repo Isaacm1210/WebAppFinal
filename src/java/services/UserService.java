@@ -13,9 +13,9 @@ import models.User;
 public class UserService {
     
     public List<User> getAllUsers() throws Exception{
-        
-        
-        return null;
+        UserDB userDB = new UserDB();
+        List<User> users = userDB.getAll();
+        return users;
     }
     
     public User getUser(String email)throws Exception{

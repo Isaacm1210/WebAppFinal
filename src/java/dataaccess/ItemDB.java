@@ -3,6 +3,8 @@ package dataaccess;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import models.Category;
 import models.Item;
 import models.User;
 
@@ -38,7 +40,24 @@ public class ItemDB{
     }
     
     public void addItem(Item item) throws Exception{
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
         
+        try{
+            User user = item.getOwner();
+            user.getItemList().add(item);
+            Category category = item.getCategory();
+            category.getItemList().add(item);
+            trans.begin();
+            em.persist(item);
+            em.merge(user);
+            em.merge(category);
+            trans.commit();     
+        }catch(Exception ex){
+            trans.rollback();
+        }finally{
+            em.close();
+        }
     }
     
     public void deleteItem(Item item) throws Exception{

@@ -12,7 +12,16 @@ import models.Category;
 public class CategoryDB {
     
     public List<Category> getAll(){
-        return null;
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        
+        try{
+            List<Category> categories = em.createNamedQuery("Category.findAll", Category.class).getResultList();
+            return categories;
+        }
+        finally{
+        em.close();
+        }
+        
     }
     
     public Category getCatecory(int category_ID) throws Exception{

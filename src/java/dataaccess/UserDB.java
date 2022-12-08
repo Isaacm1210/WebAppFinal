@@ -14,7 +14,15 @@ import models.User;
 public class UserDB {
     
     public List<User> getAll() throws Exception{ //gets all users
-        return null;
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        
+        try{
+        List<User> users = em.createNamedQuery("User.findAll", User.class).getResultList();
+        return users;
+        }
+        finally{
+            em.close();
+        }
     }
     
     

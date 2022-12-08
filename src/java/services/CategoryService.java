@@ -1,6 +1,8 @@
 
 package services;
 
+import dataaccess.CategoryDB;
+import java.util.List;
 import models.Category;
 
 /**
@@ -9,8 +11,20 @@ import models.Category;
  */
 public class CategoryService {
     
-    public Category getCategory(){
-        return null;
+    public List<Category> getAll(){
+        CategoryDB catDB = new CategoryDB();
+        
+        List<Category> categories = catDB.getAll();
+        return categories;
     }
+    
+    public Category getCategory(int categoryID) throws Exception{
+        CategoryDB catDB = new CategoryDB();
+        Category category = catDB.getCatecory(categoryID);
+        
+        return category;
+    }
+    
+    
         
 }

@@ -16,9 +16,14 @@
     <body>
         <h1>${user.firstName}'s Inventory</h1>
         
+        <a href="Login">Logout</a>
+        <br>
+        <br>
+        
         <a href="user">Return to your Account</a>
         <br>
         <br>
+        
         <c:if test="${items.size() lt 1}">
             <b>No items found. Please add an item</b>
         </c:if>
@@ -39,9 +44,22 @@
                 </c:forEach>
             </table>
         </c:if>
+            <br>
+            
+            <b>Add an Item</b>
             
             <form action="inventory" method="post">
-                
+                Category: <select name="category">
+                    <c:forEach var="Category" items="${categories}">
+                        <option value="${Category.categoryId}">${Category.categoryName}</option>
+                    </c:forEach>
+                </select>
+                <br>
+                Item Name: <input type="text" name="itemName">
+                <br>
+                Item Price: <input type="number" step="0.01" min="0" name="itemPrice">
+                <br>
+                <input type="submit" name="action" value="Add">
             </form>
     </body>
 </html>
