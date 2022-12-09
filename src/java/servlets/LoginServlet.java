@@ -87,8 +87,14 @@ public class LoginServlet extends HttpServlet {
                     getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
                 }
                 else{
-                    session.setAttribute("email", email);
-                    response.sendRedirect("user");
+                    if(user.getRole().getRoleId() == 1){
+                        session.setAttribute("email", email);
+                        response.sendRedirect("admin");
+                    }
+                    else if(user.getRole().getRoleId() == 2){
+                        session.setAttribute("email", email);
+                        response.sendRedirect("user");
+                    }
                 }
             }    
         }

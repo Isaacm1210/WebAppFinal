@@ -28,7 +28,7 @@
         <c:if test="${items.size() lt 1}">
             <b>No items found. Please add an item</b>
         </c:if>
-        
+        <br>
         <c:if test="${items.size() gt 0}">
             <table border="1">
                 <tr>

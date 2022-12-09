@@ -12,7 +12,6 @@ public class AccountService {
         try{
             User user = userDB.getUser(email);
 
-            
             if(user.getPassword().equals(password)){
                 return user;
             }

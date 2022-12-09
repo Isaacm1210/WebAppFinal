@@ -29,12 +29,16 @@
         <!--Register Form-->
         <c:if test="${enter eq 'register'}">
         <form action="Login" method="post">
-            Email: <input type="text" name="email"><br>
-            First Name: <input type="text" name="firstName"><br>
-            Last Name: <input type="text" name="lastName"><br>
-            Password: <input type="password" name="password"><br>
-            <input type="submit" value="registerUser" name="action">
-            
+            Email: <input type="text" name="email">
+            <br>
+            First Name: <input type="text" name="firstName">
+            <br>
+            Last Name: <input type="text" name="lastName">
+            <br>
+            Password: <input type="password" name="password">
+            <br>
+            <input type="hidden" name="action" value="registerUser"
+            <input type="submit" value="Register User">
         </form>
         <a href="Login">Return to Login</a>
         </c:if>

@@ -1,86 +1,129 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import models.Category;
+import models.Role;
+import models.User;
+import services.CategoryService;
+import services.RoleService;
+import services.UserService;
 
-/**
- *
- * @author mhame
- */
+
 public class AdminServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AdminServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AdminServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        UserService us = new UserService();
+        CategoryService cs = new CategoryService();
+        
+        String adminEmail = (String) session.getAttribute("email");
+        String action = request.getParameter("action");
+        
+        try{
+             if(action != null && action.equals("allAccounts")){
+                session.setAttribute("viewAcc", "true");
+                
+                List<User> userList = us.getAllUsers();
+                session.setAttribute("userList", userList);
+                
+             }
+                
+             if(action != null && action.equals("allCategories")){
+                session.setAttribute("viewCat", "true");
+                
+                List<Category> catList = cs.getAll();
+                session.setAttribute("catList", catList);
+             }
+                
+             if(action != null && action.equals("closeAcc")){
+                session.setAttribute("viewAcc", "fasle");
+                
+             }
+                
+             if(action != null && action.equals("closeCat")){
+                session.setAttribute("viewCat", "fasle");
+                
+             }
+             
+             
+        }catch(Exception ex){
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+        
+        
+        getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        UserService us = new UserService();
+        CategoryService cs = new CategoryService();
+        RoleService rs = new RoleService();
+        String action = request.getParameter("action");
+        
+        String addEmail = request.getParameter("addEmail");
+        String addFname = request.getParameter("firstName");
+        String addLname = request.getParameter("lastName");
+        String addPassword = request.getParameter("password");
+        int roleID = Integer.parseInt(request.getParameter("roleId"));
+        
+        try {
+            
+            List<Category> catList = cs.getAll();
+
+            if(action != null && action.equals("addUser")){
+
+                if(addEmail.equals("") || addFname.equals("") || addLname.equals("") || addPassword.equals("")){
+                   session.setAttribute("message", "all variables are NOT filled" );
+                }else{
+                    session.setAttribute("message", "all variables are filled" );
+                    Role role = rs.getRole(roleID);
+                    us.addUser(addEmail, addFname, addLname, addPassword, role);
+                }
+            }
+                    
+            if(action != null && action.equals("addCat")){   
+                String catName = request.getParameter("catName");
+                int catId = catList.size() + 1;
+                
+                cs.addCategory(catId, catName);
+            }
+          
+        } catch (Exception ex) {
+            Logger.getLogger(AdminServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            List<User> userList = us.getAllUsers();
+            List<Category> catList = cs.getAll();
+            session.setAttribute("catList", catList);
+            session.setAttribute("userList", userList);
+            getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(AdminServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+
+
 
 }
