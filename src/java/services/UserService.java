@@ -33,8 +33,10 @@ public class UserService {
         
     }
     
-    public void deleteUser()throws Exception{
-        
+    public void deleteUser(String email)throws Exception{
+        UserDB userDB = new UserDB();
+        User user = userDB.getUser(email);
+        userDB.deleteUser(user);
     }
     
     public void updateUser(String email, String firstName, String lastName, boolean active, String password, Role role)throws Exception{

@@ -35,17 +35,12 @@ public class AdminServlet extends HttpServlet {
         try{
              if(action != null && action.equals("allAccounts")){
                 session.setAttribute("viewAcc", "true");
-                
-                List<User> userList = us.getAllUsers();
-                session.setAttribute("userList", userList);
-                
+
              }
                 
              if(action != null && action.equals("allCategories")){
                 session.setAttribute("viewCat", "true");
                 
-                List<Category> catList = cs.getAll();
-                session.setAttribute("catList", catList);
              }
                 
              if(action != null && action.equals("closeAcc")){
@@ -64,8 +59,20 @@ public class AdminServlet extends HttpServlet {
             
         }
         
+        try {
+            List<Category> catList = cs.getAll();
+            session.setAttribute("catList", catList);
+                
+            List<User> userList = us.getAllUsers();
+            session.setAttribute("userList", userList);
+            
+            User user = us.getUser(adminEmail);
+            session.setAttribute("admin", user);
+            getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(AdminServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
     }
 
 
@@ -78,22 +85,23 @@ public class AdminServlet extends HttpServlet {
         RoleService rs = new RoleService();
         String action = request.getParameter("action");
         
-        String addEmail = request.getParameter("addEmail");
-        String addFname = request.getParameter("firstName");
-        String addLname = request.getParameter("lastName");
-        String addPassword = request.getParameter("password");
-        int roleID = Integer.parseInt(request.getParameter("roleId"));
+        
         
         try {
             
             List<Category> catList = cs.getAll();
 
             if(action != null && action.equals("addUser")){
-
+                String addEmail = request.getParameter("addEmail");
+                String addFname = request.getParameter("firstName");
+                String addLname = request.getParameter("lastName");
+                String addPassword = request.getParameter("password");
+                int roleID = Integer.parseInt(request.getParameter("roleId"));
+                
                 if(addEmail.equals("") || addFname.equals("") || addLname.equals("") || addPassword.equals("")){
-                   session.setAttribute("message", "all variables are NOT filled" );
+                  
                 }else{
-                    session.setAttribute("message", "all variables are filled" );
+                    
                     Role role = rs.getRole(roleID);
                     us.addUser(addEmail, addFname, addLname, addPassword, role);
                 }

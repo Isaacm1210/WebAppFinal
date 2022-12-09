@@ -20,6 +20,9 @@
             Email: <input type="text" name="email"><br>
             Password: <input type="password" name="password"><br>
             <input type="submit" value="Login" name="action">
+        </form>
+        
+        <form action="Login" method="post">
             <input type="submit" value="Register" name="action">
         </form>
         <br>
@@ -37,7 +40,7 @@
             <br>
             Password: <input type="password" name="password">
             <br>
-            <input type="hidden" name="action" value="registerUser"
+            <input type="hidden" name="action" value="registerUser">
             <input type="submit" value="Register User">
         </form>
         <a href="Login">Return to Login</a>

@@ -99,4 +99,31 @@ public class ItemDB{
             
         
     }
+    
+    public void deleteAll(List<Item> items, User owner){
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        
+        try{
+            for(int i = 0; !items.isEmpty(); i++ ){
+                Item item = items.get(i);
+                
+                owner.getItemList().remove(item);
+                
+                Category category = item.getCategory();
+                category.getItemList().remove(item);
+            
+                trans.begin();
+                em.remove(em.merge(item));
+                em.merge(owner);
+                em.merge(category);
+                trans.commit();
+            }
+            
+        }catch(Exception ex){
+            trans.rollback();
+        }finally{
+            em.close();
+        }
+    }
 }

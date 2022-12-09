@@ -50,7 +50,9 @@
                 
         <c:if test="${view eq 'edit'}">
             <h3>Edit Your Information</h3>
-
+            
+                <b>${editError}</b>
+                
             <form action="user" method="post">
                 Email: ${user.email}
                 <input type="hidden" name="email" value="${user.email}">

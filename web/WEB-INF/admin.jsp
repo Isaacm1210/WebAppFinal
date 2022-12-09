@@ -12,9 +12,9 @@
         <title>HOME nVentory Admin Page</title>
     </head>
     <body>
-        <h1>Hello ${adminName}</h1>
+        <h1>Hello ${admin.firstName}</h1>
         
-        <a href="Login">Logout</a>
+        <a href="Login">Logout ${admin.firstName}</a>
         <br>
         <br>
         <br>
@@ -43,11 +43,15 @@
                     <td>${User.password}</td>
                     <td>${User.role.roleName}</td>
                     <td>${User.active}</td>
-                    <td>Manage</td>
+                    <td><a href="<c:url value="/accounts">
+                               <c:param name="action" value="manageAcc"/>
+                               <c:param name="accEmail" value="${User.email}"/>
+                           </c:url>">Manage</a></td>
                 </tr>
                 </c:forEach>
             </table> 
-            
+            <br>
+            <h3>Add a new User</h3>
             <form action="admin" method="post">
                 Email:<input type="text" name="addEmail">
                 <br>

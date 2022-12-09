@@ -4,6 +4,7 @@ package dataaccess;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import models.Item;
 import models.Role;
 import models.User;
 
@@ -64,8 +65,26 @@ public class UserDB {
     public void deleteUser(User user) throws Exception{ //Removes a User from the data base
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
+        ItemDB itemDB = new ItemDB();
         
+        try{
+            List<Item> itemList = user.getItemList();
+            itemDB.deleteAll(itemList, user);
+            
+            Role role = user.getRole();
+            role.getUserList().remove(user);
+            
+            trans.begin();
+            em.remove(em.merge(user));
+            em.merge(role);
+            trans.commit();
+        }catch(Exception ex){
+            trans.rollback();
+        }finally{
+            em.close();
+        }
     }
+            
     
     
     public void updateUser(User user) throws Exception{ //Updates Information of a User

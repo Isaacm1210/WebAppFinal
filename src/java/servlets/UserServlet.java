@@ -79,10 +79,14 @@ public class UserServlet extends HttpServlet {
             
             if(action != null && action.equals("Edit Info")){
                 
+                if(firstName.equals("") || lastName.equals("") || password.equals("")){
+                    session.setAttribute("editError", "All fields must be filled");
+                }else{
                 boolean active = user.getActive();
                 Role role = user.getRole();
                 
                 us.updateUser(email, firstName, lastName, active, password, role);
+                }
             } 
                 
             if(action != null && action.equals("Deactivate")){
@@ -105,7 +109,7 @@ public class UserServlet extends HttpServlet {
             User user = us.getUser(email);
             user = us.getUser(email);
             session.setAttribute("user", user);
-            
+            getServletContext().getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response); 
         } catch (Exception ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
