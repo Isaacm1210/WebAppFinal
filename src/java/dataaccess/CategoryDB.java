@@ -53,7 +53,18 @@ public class CategoryDB {
     }
     
     public void updateCategory(Category category){
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
         
+        try{
+            trans.begin();
+            em.merge(category);
+            trans.commit();
+        }catch(Exception ex){
+            trans.rollback();
+        }finally{
+            em.close();
+        }
     }
     
 }

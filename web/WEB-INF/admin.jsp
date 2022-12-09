@@ -12,13 +12,14 @@
         <title>HOME nVentory Admin Page</title>
     </head>
     <body>
-        <h1>Hello ${admin.firstName}</h1>
+        <h1>Welcome to the Admin Home page</h1>
         
-        <a href="Login">Logout ${admin.firstName}</a>
+        <b>Logged in as "${admin.firstName}"</b>
+        <br>
+        <a href="Login">Logout</a>
         <br>
         <br>
         <br>
-        
         <c:if test="${viewAcc ne 'true'}">
             <a href="admin?action=allAccounts">View All Accounts</a>
         </c:if>
@@ -51,7 +52,7 @@
                 </c:forEach>
             </table> 
             <br>
-            <h3>Add a new User</h3>
+            <b>Add a new User</b>
             <form action="admin" method="post">
                 Email:<input type="text" name="addEmail">
                 <br>
@@ -74,7 +75,6 @@
             
         </c:if>
         <br>
-        <br>
         <b>${message}</b>
         <br>
         <c:if test="${viewCat ne 'true'}">
@@ -94,11 +94,15 @@
                 <tr>
                     <td>${Category.categoryName}</td>
                     <td>${Category.categoryId}</td>
-                    <td>Manage</td>
+                    <td><a href="<c:url value="/category">
+                           <c:param name="action" value="manageCat"/>
+                           <c:param name="catID" value="${Category.categoryId}"/>
+                           </c:url>">Manage</a></td>
                 </tr>
                 </c:forEach>
             </table>
-
+                <br>
+                <b>Add a new category</b>
             <form action="admin" method="post">
                 Category Name:<input type="text" name="catName" >
                 <input type="hidden" name="action" value="addCat">

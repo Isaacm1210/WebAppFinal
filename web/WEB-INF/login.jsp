@@ -10,12 +10,11 @@
     </head>
     <body>
         <h1>HOME nVentory</h1>
-        
-        <h2>Please Login</h2>
-        <b>${message}</b>
-        
+
         <!--Login Form-->
         <c:if test="${enter ne 'register'}">
+            <h2>Please Login</h2>
+            <b>${message}</b>
         <form action="Login" method="post">
             Email: <input type="text" name="email"><br>
             Password: <input type="password" name="password"><br>
@@ -31,6 +30,8 @@
         
         <!--Register Form-->
         <c:if test="${enter eq 'register'}">
+            <h2>Please Register your account</h2>
+            <b>${message}</b>
         <form action="Login" method="post">
             Email: <input type="text" name="email">
             <br>

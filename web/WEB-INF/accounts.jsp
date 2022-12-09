@@ -12,14 +12,16 @@
         <title>Manage All Accounts</title>
     </head>
     <body>
-        <h1>Welcome to the Account Manage Page ${admin.firstName}</h1>
+        <h1>Welcome to the Account Manage Page</h1>
+        <b>Logged in as "${admin.firstName}"</b>
         <br>
         <a href="Login">Logout ${admin.firstName}</a>
         <br>
+        <br>
         <a href="admin">Return to Admin Home Page</a>
         <br>
-        
-        <h3>Manage ${manageUser.firstName}'s Account</h3>
+        <br>
+        <b>Manage ${manageUser.firstName}'s Account</b>
         <form action="accounts" method="post">
             Email: <input type="text" name="accEmail" value="${manageUser.email}"> 
             <br>
