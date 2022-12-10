@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>${user.firstName}'s Information</title>
+        <title>${user.firstName}'s Home nVentory</title>
     </head>
     <body>
 

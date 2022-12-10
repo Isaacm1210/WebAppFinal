@@ -14,7 +14,7 @@
     
     </head>
     <body>
-        <h1>${user.firstName}'s Inventory</h1>
+        <h1>${user.firstName} ${user.lastName}'s Inventory</h1>
         
         <a href="Login">Logout</a>
         <br>
