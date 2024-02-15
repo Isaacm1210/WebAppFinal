@@ -8,7 +8,7 @@ import models.Category;
 
 /**
  *
- * @author mhame
+ * @author Isaac Mhamed
  */
 public class CategoryDB {
     
